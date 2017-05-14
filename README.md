@@ -1,1 +1,1 @@
-![screenshot](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Screenshot")
+![screenshot](https://raw.githubusercontent.com/hbradlow/astrodynamics/master/screenshot.png "Screenshot")
