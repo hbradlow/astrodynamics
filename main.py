@@ -21,10 +21,11 @@ def main():
     black = 20, 20, 40
     screen.fill(black)
 
-    planet = Planet(30, np.array(WINCENTER))
+    planet = Planet(30, np.array(WINCENTER), np.array(WINCENTER, dtype=np.float64))
     satellite = Satellite(np.array([150,150], dtype=np.float64), 
                             np.array([0, 100], dtype=np.float64),
-                            planet) 
+                            planet,
+                            np.array(WINCENTER, dtype=np.float64)) 
 
     #main game loop
     done = 0
@@ -46,6 +47,12 @@ def main():
                 satellite.burn(25)
             elif e.type == KEYUP and e.key == K_RIGHT:
                 satellite.burn(-25)
+            elif e.type == KEYUP and e.key == K_EQUALS:
+                satellite.scale *= 1.1
+                planet.scale *= 1.1
+            elif e.type == KEYUP and e.key == K_MINUS:
+                satellite.scale *= 0.9
+                planet.scale *= 0.9
         clock.tick(100)
 
 

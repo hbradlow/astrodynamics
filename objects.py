@@ -3,17 +3,21 @@ import pygame.draw
 
 class Planet:
     
-    def __init__(self, radius, position):
+    def __init__(self, radius, position, center):
         self.radius = radius
         self.position = position
         self.mu = 2.0e6
+        self.scale = 1.0
+        self.center = center
 
     def draw(self, screen):
-        pygame.draw.circle(screen, (255, 255, 255), self.position, self.radius)
+        pygame.draw.circle(screen, (255, 255, 255), 
+            (self.center + (self.position - self.center) * self.scale).astype(int), 
+            int(self.radius * self.scale))
 
 class Satellite:
 
-    def __init__(self, position, velocity, planet):
+    def __init__(self, position, velocity, planet, center):
         self.position = position
         self.velocity = velocity
         self.planet = planet
@@ -22,6 +26,9 @@ class Satellite:
 
         self.path_p = None
         self.path_e = None
+
+        self.scale = 1.0
+        self.center = center
 
     def r(self):
         return self.position - self.planet.position
@@ -50,7 +57,9 @@ class Satellite:
         return np.dot(self.h(), self.h()) / self.planet.mu
 
     def draw(self, screen, color=(255, 255, 255)):
-        pygame.draw.circle(screen, color, self.position.astype(int), self.radius)
+        pygame.draw.circle(screen, color,
+            (self.center + (self.position - self.center) * self.scale).astype(int), 
+            int(self.radius * self.scale))
 
     def update_path_params(self):
         self.path_p = self.p()
@@ -66,6 +75,8 @@ class Satellite:
 
             M = np.array([[np.cos(v), -np.sin(v)], [np.sin(v),  np.cos(v)]])
             p = self.planet.position + r * np.dot(M, (self.path_e/np.linalg.norm(self.path_e)))
+
+            p = self.center + (p - self.center) * self.scale
 
             if prev_p is not None:
                 pygame.draw.line(screen, color, prev_p, p, 1)
