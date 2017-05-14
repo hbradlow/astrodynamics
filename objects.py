@@ -38,9 +38,6 @@ class Satellite:
     def b(self):
         return np.sqrt(self.a() ** 2 - self.c() ** 2)
 
-    def center(self):
-        return self.planet.position + self.e() * self.c() / np.linalg.norm(self.e())
-
     def h(self):
         return np.cross(self.r(), self.velocity)
 
