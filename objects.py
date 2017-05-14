@@ -24,7 +24,7 @@ class Satellite:
         self.path_e = None
 
     def r(self):
-        return self.planet.position - self.position
+        return self.position - self.planet.position
 
     def specific_energy(self):
         return np.dot(self.velocity, self.velocity)/2.0 - self.planet.mu/np.linalg.norm(self.r())
@@ -68,7 +68,7 @@ class Satellite:
             r = self.path_p / (1 + np.linalg.norm(self.path_e) * np.cos(v))
 
             M = np.array([[np.cos(v), -np.sin(v)], [np.sin(v),  np.cos(v)]])
-            p = self.planet.position - r * np.dot(M, (self.path_e/np.linalg.norm(self.path_e)))
+            p = self.planet.position + r * np.dot(M, (self.path_e/np.linalg.norm(self.path_e)))
 
             if prev_p is not None:
                 pygame.draw.line(screen, color, prev_p, p, 1)
@@ -76,7 +76,7 @@ class Satellite:
             prev_p = p
 
     def update(self, dt):
-        self.velocity += self.planet.mu * dt * self.r() / np.linalg.norm(self.r())**3
+        self.velocity -= self.planet.mu * dt * self.r() / np.linalg.norm(self.r())**3
         self.position += dt * self.velocity
         if self.path_e is None or self.path_e is None:
             self.update_path_params()
